@@ -15,21 +15,30 @@
                     <a href="/" class="text-xl font-bold text-gray-800">Group Mark Hundson</a>
                     <div class="hidden md:flex space-x-4">
                         <a href="/" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md">Home</a>
-                        <a href="/members" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md">Members</a>
+                        <!-- Public Members Link - Only visible to non-logged in users -->
+                        @guest
+                            <a href="/members" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md">Members</a>
+                        @endguest
+                        
+                        <!-- Admin Navigation - Only visible to logged in admin -->
+                        @auth
+                            @if(Auth::user()->isAdmin())
+                                <a href="/admin/dashboard" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md">Admin Dashboard</a>
+                                <a href="/admin/members/table" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md">All Members</a>
+                                <a href="/admin/members" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md">Manage Members</a>
+                            @endif
+                        @endauth
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
                     @auth
                         <span class="text-gray-600">Welcome, {{ Auth::user()->name }}</span>
-                        @if(Auth::user()->isAdmin())
-                            <a href="/admin/dashboard" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Admin</a>
-                        @endif
                         <form method="POST" action="/logout">
                             @csrf
                             <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Logout</button>
                         </form>
                     @else
-                        <!-- Login button removed - only accessible via URL -->
+                        <!-- No login button visible -->
                     @endauth
                 </div>
             </div>

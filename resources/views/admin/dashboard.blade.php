@@ -14,16 +14,16 @@
                 📊 Dashboard
             </a>
             
-            <!-- Manage Members -->
-            <a href="/admin/members" 
-               class="block px-4 py-2 rounded-lg {{ request()->is('admin/members') ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-100' }} transition">
-                ✏️ Manage Members
+            <!-- All Members (Table View) -->
+            <a href="/admin/members/table" 
+               class="block px-4 py-2 rounded-lg {{ request()->is('admin/members/table') ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-100' }} transition">
+                👥 All Members (Table)
             </a>
             
-            <!-- View All Members (Public View) -->
-            <a href="/members" 
-               class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition">
-                👥 View All Members
+            <!-- Manage Members (CRUD) -->
+            <a href="/admin/members" 
+               class="block px-4 py-2 rounded-lg {{ request()->is('admin/members') && !request()->is('admin/members/table') ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-100' }} transition">
+                ✏️ Manage Members
             </a>
         </nav>
         
@@ -34,6 +34,10 @@
                 <div class="flex justify-between text-sm">
                     <span class="text-gray-600">Total Members:</span>
                     <span class="font-bold text-blue-600">{{ $totalMembers }}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-600">Total Roles:</span>
+                    <span class="font-bold text-green-600">{{ \App\Models\Member::distinct('role')->count('role') }}</span>
                 </div>
             </div>
         </div>
@@ -135,7 +139,7 @@
                 </div>
                 
                 <div class="mt-4 text-right">
-                    <a href="/admin/members" class="text-blue-500 hover:text-blue-700 text-sm font-medium">
+                    <a href="/admin/members/table" class="text-blue-500 hover:text-blue-700 text-sm font-medium">
                         View All Members →
                     </a>
                 </div>

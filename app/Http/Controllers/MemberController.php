@@ -8,18 +8,28 @@ use Illuminate\Support\Facades\Storage;
 
 class MemberController extends Controller
 {
+    // Public view (card layout)
     public function index()
     {
         $members = Member::all();
         return view('members.index', compact('members'));
     }
 
+    // Admin table view (for sidebar "All Members")
+    public function adminTableView()
+    {
+        $members = Member::all();
+        return view('admin.members.table-view', compact('members'));
+    }
+
+    // Admin management view (with CRUD)
     public function adminIndex()
     {
         $members = Member::all();
         return view('admin.members.index', compact('members'));
     }
 
+    // Rest of your methods (create, store, edit, update, destroy) remain the same...
     public function create()
     {
         return view('admin.members.create');
@@ -63,7 +73,6 @@ class MemberController extends Controller
         ]);
 
         if ($request->hasFile('profile_photo')) {
-            // Delete old photo
             if ($member->profile_photo) {
                 Storage::disk('public')->delete($member->profile_photo);
             }
@@ -78,7 +87,6 @@ class MemberController extends Controller
 
     public function destroy(Member $member)
     {
-        // Delete profile photo if exists
         if ($member->profile_photo) {
             Storage::disk('public')->delete($member->profile_photo);
         }
