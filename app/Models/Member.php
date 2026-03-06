@@ -14,12 +14,19 @@ class Member extends Model
         'last_name',
         'role',
         'bio',
-        'age'
+        'age',
+        'profile_photo'
     ];
 
-    // Accessor for full name
     public function getFullNameAttribute()
     {
         return "{$this->first_name} {$this->last_name}";
+    }
+
+    public function getProfilePhotoUrlAttribute()
+    {
+        return $this->profile_photo 
+            ? asset('storage/' . $this->profile_photo)
+            : asset('images/default-avatar.png');
     }
 }

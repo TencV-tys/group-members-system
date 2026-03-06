@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\Admin\DashboardController;
 
 // Home page
 Route::get('/', function () {
@@ -17,19 +18,12 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// User dashboard (protected)
-Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('user.dashboard');
-    })->name('user.dashboard');
-});
-
-// Admin routes
+// Admin routes (all protected)
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    // Admin Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     
+    // Member Management
     Route::get('/members', [MemberController::class, 'adminIndex'])->name('admin.members.index');
     Route::get('/members/create', [MemberController::class, 'create'])->name('admin.members.create');
     Route::post('/members', [MemberController::class, 'store'])->name('admin.members.store');
