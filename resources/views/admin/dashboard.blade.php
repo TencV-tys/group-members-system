@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Admin Dashboard')
 
@@ -17,7 +17,7 @@
             <!-- All Members (Table View) -->
             <a href="/admin/members/table" 
                class="block px-4 py-2 rounded-lg {{ request()->is('admin/members/table') ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-100' }} transition">
-                👥 All Members (Table)
+                👥 All Members
             </a>
             
             <!-- Manage Members (CRUD) -->
@@ -48,7 +48,7 @@
         <!-- Welcome Banner -->
         <div class="bg-gradient-to from-blue-500 to-blue-600 rounded-lg shadow-lg p-6 text-white mb-6">
             <h1 class="text-3xl font-bold mb-2">Welcome back, {{ Auth::user()->name }}!</h1>
-            <p class="text-blue-100">Here's what's happening with your group today.</p>
+            <p class="text-blue-100">Admin Dashboard - Manage your group members</p>
         </div>
 
         <!-- Stats Cards -->
@@ -98,7 +98,10 @@
 
         <!-- Recent Members Table -->
         <div class="bg-white rounded-lg shadow-lg p-6">
-            <h2 class="text-xl font-bold text-gray-800 mb-4">Recent Members</h2>
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-gray-800">Recent Members</h2>
+                <a href="/admin/members/table" class="text-sm text-blue-600 hover:text-blue-800">View All →</a>
+            </div>
             
             @if($recentMembers->isEmpty())
                 <p class="text-gray-500 text-center py-4">No members added yet.</p>
@@ -129,19 +132,17 @@
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 font-medium">{{ $member->first_name }} {{ $member->last_name }}</td>
-                                <td class="px-6 py-4">{{ $member->role }}</td>
+                                <td class="px-6 py-4">
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
+                                        {{ $member->role }}
+                                    </span>
+                                </td>
                                 <td class="px-6 py-4">{{ $member->age }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-500">{{ $member->created_at->diffForHumans() }}</td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
-                </div>
-                
-                <div class="mt-4 text-right">
-                    <a href="/admin/members/table" class="text-blue-500 hover:text-blue-700 text-sm font-medium">
-                        View All Members →
-                    </a>
                 </div>
             @endif
         </div>

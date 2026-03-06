@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Manage Members')
 
@@ -8,13 +8,22 @@
     <div class="w-64 bg-white rounded-lg shadow-lg p-6 h-fit">
         <h2 class="text-lg font-semibold text-gray-800 mb-4">Admin Menu</h2>
         <nav class="space-y-2">
-            <a href="/admin/members" 
-               class="block px-4 py-2 rounded-lg bg-blue-500 text-white font-medium">
-                📋 Manage Members
+            <!-- Dashboard -->
+            <a href="/admin/dashboard" 
+               class="block px-4 py-2 rounded-lg {{ request()->is('admin/dashboard') ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-100' }} transition">
+                📊 Dashboard
             </a>
-            <a href="/members" 
-               class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition">
-                👥 All Members (View)
+            
+            <!-- All Members (Table View) -->
+            <a href="/admin/members/table" 
+               class="block px-4 py-2 rounded-lg {{ request()->is('admin/members/table') ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-100' }} transition">
+                👥 All Members
+            </a>
+            
+            <!-- Manage Members (CRUD) -->
+            <a href="/admin/members" 
+               class="block px-4 py-2 rounded-lg {{ request()->is('admin/members') && !request()->is('admin/members/table') ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-100' }} transition">
+                ✏️ Manage Members
             </a>
         </nav>
         
@@ -86,7 +95,7 @@
     </div>
 </div>
 
-<!-- Create/Edit Modal (same as before) -->
+<!-- Create/Edit Modal -->
 <div id="memberModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50">
     <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-lg bg-white">
         <div class="flex justify-between items-center mb-4">
@@ -228,7 +237,6 @@
         }
     }
 
-    // Close modal when clicking outside
     window.onclick = function(event) {
         const modal = document.getElementById('memberModal');
         if (event.target == modal) {

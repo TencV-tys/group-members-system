@@ -23,7 +23,10 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     // Admin Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     
-    // Member Management
+    // All Members (Table View) - ADD THIS LINE
+    Route::get('/members/table', [MemberController::class, 'adminTableView'])->name('admin.members.table');
+    
+    // Member Management (CRUD)
     Route::get('/members', [MemberController::class, 'adminIndex'])->name('admin.members.index');
     Route::get('/members/create', [MemberController::class, 'create'])->name('admin.members.create');
     Route::post('/members', [MemberController::class, 'store'])->name('admin.members.store');
