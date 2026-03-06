@@ -11,15 +11,15 @@
     <nav class="bg-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between h-16">
-                <div class="flex items-center space-x-8">
+                <!-- Logo on the left -->
+                <div class="flex items-center">
                     <a href="/" class="text-xl font-bold text-gray-800">Group Mark Hundson</a>
-                    <div class="hidden md:flex space-x-4">
-                        <a href="/" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md">Home</a>
-                        <a href="/members" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md">Members</a>
-                    </div>
                 </div>
+                
+                <!-- Navigation links on the right -->
                 <div class="flex items-center space-x-4">
-                    <!-- No login or user info shown -->
+                    <a href="/" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md">Home</a>
+                    <a href="/members" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md">Members</a>
                 </div>
             </div>
         </div>

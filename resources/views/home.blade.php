@@ -6,7 +6,7 @@
     <div class="min-h-[70vh] flex flex-col items-center justify-center">
         <!-- Big centered text -->
         <h1 class="text-8xl md:text-9xl font-bold text-gray-800 text-center mb-8">
-            GROUP MARK HUDSON
+            GROUP MARK HUNDSON
         </h1>
         
         <!-- Decorative line -->
