@@ -49,7 +49,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Handle logout
+     * Handle logout - FIXED VERSION
      */
     public function logout(Request $request)
     {
@@ -58,7 +58,8 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         
-        return redirect('/')
+        // CHANGED FROM '/' TO '/login'
+        return redirect('/login')
             ->with('success', 'You have been logged out successfully.');
     }
 

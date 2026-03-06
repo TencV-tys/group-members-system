@@ -29,7 +29,6 @@ class MemberController extends Controller
         return view('admin.members.index', compact('members'));
     }
 
-    // Rest of your methods (create, store, edit, update, destroy) remain the same...
     public function create()
     {
         return view('admin.members.create');
@@ -53,7 +52,9 @@ class MemberController extends Controller
 
         Member::create($validated);
 
-        return response()->json(['success' => true, 'message' => 'Member created successfully']);
+        // CHANGE THIS FROM JSON TO REDIRECT
+        return redirect()->route('admin.members.index')
+            ->with('success', 'Member created successfully');
     }
 
     public function edit(Member $member)
@@ -82,7 +83,9 @@ class MemberController extends Controller
 
         $member->update($validated);
 
-        return response()->json(['success' => true, 'message' => 'Member updated successfully']);
+        // CHANGE THIS FROM JSON TO REDIRECT
+        return redirect()->route('admin.members.index')
+            ->with('success', 'Member updated successfully');
     }
 
     public function destroy(Member $member)
@@ -93,6 +96,8 @@ class MemberController extends Controller
         
         $member->delete();
 
-        return response()->json(['success' => true, 'message' => 'Member deleted successfully']);
+        // CHANGE THIS FROM JSON TO REDIRECT
+        return redirect()->route('admin.members.index')
+            ->with('success', 'Member deleted successfully');
     }
 }
