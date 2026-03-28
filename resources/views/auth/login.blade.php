@@ -18,7 +18,7 @@
             <!-- Header -->
             <div class="text-center mb-8">
                 <h1 class="text-3xl font-bold text-gray-800">Group Mark Hudson</h1>
-                <p class="text-gray-600 mt-2">Admin Login</p>
+                <p class="text-gray-600 mt-2"> Login</p>
             </div>
 
             <!-- Error Message -->

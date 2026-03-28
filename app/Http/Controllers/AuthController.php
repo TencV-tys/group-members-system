@@ -20,33 +20,34 @@ class AuthController extends Controller
     /**
      * Handle login request
      */
-    public function login(Request $request)
-    {
-        // Validate input
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required'
-        ]);
+public function login(Request $request)
+{
+    $credentials = $request->validate([
+        'email' => 'required|string',
+        'password' => 'required'
+    ]);
 
-        // Attempt to login
-        if (Auth::attempt($credentials, $request->remember)) {
-            $request->session()->regenerate();
-            
-            // Check user role and redirect accordingly
-            if (Auth::user()->isAdmin()) {
-                return redirect()->intended('/admin/dashboard')
-                    ->with('success', 'Welcome back, Admin!');
-            }
-            
-            return redirect()->intended('/dashboard')
-                ->with('success', 'Welcome back!');
+    $field = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+    if (Auth::attempt([$field => $request->email, 'password' => $request->password], $request->remember)) {
+        $request->session()->regenerate();
+        
+        $user = Auth::user();
+        
+        if ($user->isAdmin()) {
+            return redirect()->intended('/admin/dashboard')
+                ->with('success', 'Welcome back, Admin!');
         }
-
-        // Login failed
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+        
+        // Redirect regular users to member dashboard
+        return redirect()->intended('/dashboard')
+            ->with('success', 'Welcome back, ' . $user->name . '!');
     }
+
+    return back()->withErrors([
+        'email' => 'The provided credentials do not match our records.',
+    ])->onlyInput('email');
+}
 
     /**
      * Handle logout - FIXED VERSION

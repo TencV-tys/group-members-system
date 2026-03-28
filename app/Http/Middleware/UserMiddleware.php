@@ -15,9 +15,9 @@ class UserMiddleware
         }
 
         if (Auth::user()->isUser()) {
-            return $next($request);
-        }
+            return $next($request); 
+        } 
 
         return redirect('/admin/dashboard')->with('error', 'This area is for regular users only.');
     }
-}
+} 
