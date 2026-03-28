@@ -104,6 +104,21 @@
                         class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"></textarea>
                 </div>
 
+                <!-- NEW FIELDS - EMAIL AND USERNAME -->
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                    <input type="email" id="create_email" name="email" required 
+                        class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                    <p class="text-xs text-gray-500 mt-1">Used for login and communication</p>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Username</label>
+                    <input type="text" id="create_username" name="username" required 
+                        class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                    <p class="text-xs text-gray-500 mt-1">Used for login (must be unique)</p>
+                </div>
+
                 <div>
                     <label class="block text-gray-700 text-sm font-bold mb-2">Profile Photo</label>
                     <input type="file" id="create_profile_photo" name="profile_photo" accept="image/*"
@@ -163,6 +178,21 @@
                         class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"></textarea>
                 </div>
 
+                <!-- NEW FIELDS - EMAIL AND USERNAME -->
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                    <input type="email" id="edit_email" name="email" required 
+                        class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                    <p class="text-xs text-gray-500 mt-1">Used for login and communication</p>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Username</label>
+                    <input type="text" id="edit_username" name="username" required 
+                        class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                    <p class="text-xs text-gray-500 mt-1">Used for login (must be unique)</p>
+                </div>
+
                 <div>
                     <label class="block text-gray-700 text-sm font-bold mb-2">Profile Photo</label>
                     <input type="file" id="edit_profile_photo" name="profile_photo" accept="image/*"
@@ -208,27 +238,37 @@
     }
 
     // Open Edit Modal
-    function openEditModal(id) {
-        fetch(`/admin/members/${id}/edit`)
-            .then(res => res.json())
-            .then(member => {
-                document.getElementById('edit_id').value = member.id;
-                document.getElementById('edit_first_name').value = member.first_name;
-                document.getElementById('edit_last_name').value = member.last_name;
-                document.getElementById('edit_role').value = member.role;
-                document.getElementById('edit_age').value = member.age;
-                document.getElementById('edit_bio').value = member.bio || '';
-                
-                if (member.profile_photo) {
-                    document.getElementById('currentPhotoImg').src = '/storage/' + member.profile_photo;
-                    document.getElementById('currentPhoto').classList.remove('hidden');
-                } else {
-                    document.getElementById('currentPhoto').classList.add('hidden');
-                }
-                
-                document.getElementById('editModal').classList.remove('hidden');
-            });
-    }
+  // Open Edit Modal
+function openEditModal(id) {
+    fetch(`/admin/members/${id}/edit`)
+        .then(res => res.json())
+        .then(member => {
+            document.getElementById('edit_id').value = member.id;
+            document.getElementById('edit_first_name').value = member.first_name;
+            document.getElementById('edit_last_name').value = member.last_name;
+            document.getElementById('edit_role').value = member.role;
+            document.getElementById('edit_age').value = member.age;
+            document.getElementById('edit_bio').value = member.bio || '';
+            
+            // NEW: Populate email and username
+            if (member.user) {
+                document.getElementById('edit_email').value = member.user.email || '';
+                document.getElementById('edit_username').value = member.user.username || '';
+            } else {
+                document.getElementById('edit_email').value = '';
+                document.getElementById('edit_username').value = '';
+            }
+            
+            if (member.profile_photo) {
+                document.getElementById('currentPhotoImg').src = '/storage/' + member.profile_photo;
+                document.getElementById('currentPhoto').classList.remove('hidden');
+            } else {
+                document.getElementById('currentPhoto').classList.add('hidden');
+            }
+            
+            document.getElementById('editModal').classList.remove('hidden');
+        });
+}
 
     // Open View Modal
     function openViewModal(id) {

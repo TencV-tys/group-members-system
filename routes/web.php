@@ -34,3 +34,10 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::put('/members/{member}', [MemberController::class, 'update'])->name('admin.members.update');
     Route::delete('/members/{member}', [MemberController::class, 'destroy'])->name('admin.members.destroy');
 });
+
+// Member routes (protected)
+Route::middleware(['auth', 'user'])->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\MemberProfileController::class, 'dashboard'])->name('member.dashboard');
+    Route::get('/profile/edit', [App\Http\Controllers\MemberProfileController::class, 'edit'])->name('member.profile.edit');
+    Route::put('/profile/update', [App\Http\Controllers\MemberProfileController::class, 'update'])->name('member.profile.update');
+});

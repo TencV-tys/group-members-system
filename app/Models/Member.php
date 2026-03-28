@@ -27,6 +27,11 @@ class Member extends Model
     {
         return $this->profile_photo 
             ? asset('storage/' . $this->profile_photo)
-            : asset('images/default-avatar.png');
+            : asset('images/default-image.png');
+    }
+
+    public function user()
+    {
+        return $this->hasOne(User::class);
     }
 }
