@@ -104,7 +104,6 @@
                         class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"></textarea>
                 </div>
 
-                <!-- NEW FIELDS - EMAIL AND USERNAME -->
                 <div>
                     <label class="block text-gray-700 text-sm font-bold mb-2">Email</label>
                     <input type="email" id="create_email" name="email" required 
@@ -117,6 +116,13 @@
                     <input type="text" id="create_username" name="username" required 
                         class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
                     <p class="text-xs text-gray-500 mt-1">Used for login (must be unique)</p>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                    <input type="password" id="create_password" name="password" required minlength="8"
+                        class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                    <p class="text-xs text-gray-500 mt-1">Minimum 8 characters</p>
                 </div>
 
                 <div>
@@ -178,7 +184,6 @@
                         class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"></textarea>
                 </div>
 
-                <!-- NEW FIELDS - EMAIL AND USERNAME -->
                 <div>
                     <label class="block text-gray-700 text-sm font-bold mb-2">Email</label>
                     <input type="email" id="edit_email" name="email" required 
@@ -191,6 +196,13 @@
                     <input type="text" id="edit_username" name="username" required 
                         class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
                     <p class="text-xs text-gray-500 mt-1">Used for login (must be unique)</p>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2">New Password (Optional)</label>
+                    <input type="password" id="edit_password" name="password" 
+                        class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                    <p class="text-xs text-gray-500 mt-1">Leave blank to keep current password</p>
                 </div>
 
                 <div>
@@ -238,37 +250,41 @@
     }
 
     // Open Edit Modal
-  // Open Edit Modal
-function openEditModal(id) {
-    fetch(`/admin/members/${id}/edit`)
-        .then(res => res.json())
-        .then(member => {
-            document.getElementById('edit_id').value = member.id;
-            document.getElementById('edit_first_name').value = member.first_name;
-            document.getElementById('edit_last_name').value = member.last_name;
-            document.getElementById('edit_role').value = member.role;
-            document.getElementById('edit_age').value = member.age;
-            document.getElementById('edit_bio').value = member.bio || '';
-            
-            // NEW: Populate email and username
-            if (member.user) {
-                document.getElementById('edit_email').value = member.user.email || '';
-                document.getElementById('edit_username').value = member.user.username || '';
-            } else {
-                document.getElementById('edit_email').value = '';
-                document.getElementById('edit_username').value = '';
-            }
-            
-            if (member.profile_photo) {
-                document.getElementById('currentPhotoImg').src = '/storage/' + member.profile_photo;
-                document.getElementById('currentPhoto').classList.remove('hidden');
-            } else {
-                document.getElementById('currentPhoto').classList.add('hidden');
-            }
-            
-            document.getElementById('editModal').classList.remove('hidden');
-        });
-}
+    function openEditModal(id) {
+        fetch(`/admin/members/${id}/edit`)
+            .then(res => res.json())
+            .then(member => {
+                document.getElementById('edit_id').value = member.id;
+                document.getElementById('edit_first_name').value = member.first_name;
+                document.getElementById('edit_last_name').value = member.last_name;
+                document.getElementById('edit_role').value = member.role;
+                document.getElementById('edit_age').value = member.age;
+                document.getElementById('edit_bio').value = member.bio || '';
+                
+                // Populate email and username
+                if (member.user) {
+                    document.getElementById('edit_email').value = member.user.email || '';
+                    document.getElementById('edit_username').value = member.user.username || '';
+                } else {
+                    document.getElementById('edit_email').value = '';
+                    document.getElementById('edit_username').value = '';
+                }
+                
+                // Clear password field for security
+                document.getElementById('edit_password').value = '';
+                
+                // Handle profile photo
+                if (member.profile_photo) {
+                    document.getElementById('currentPhotoImg').src = '/storage/' + member.profile_photo;
+                    document.getElementById('currentPhoto').classList.remove('hidden');
+                } else {
+                    document.getElementById('currentPhoto').classList.add('hidden');
+                }
+                
+                document.getElementById('editModal').classList.remove('hidden');
+            })
+            .catch(error => console.error('Error:', error));
+    }
 
     // Open View Modal
     function openViewModal(id) {
@@ -286,16 +302,35 @@ function openEditModal(id) {
                         <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm mt-2">${member.role}</span>
                     </div>
                     <div class="border-t pt-4">
-                        <p class="text-gray-600"><span class="font-semibold">Age:</span> ${member.age}</p>
-                        <p class="text-gray-600 mt-2"><span class="font-semibold">Bio:</span></p>
-                        <p class="text-gray-700 bg-gray-50 p-3 rounded-lg mt-1">${member.bio || 'No bio provided'}</p>
-                        <p class="text-gray-500 text-sm mt-3">Member since: ${new Date(member.created_at).toLocaleDateString()}</p>
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div class="bg-gray-50 p-3 rounded-lg text-center">
+                                <p class="text-sm text-gray-500">Age</p>
+                                <p class="text-xl font-bold text-gray-800">${member.age}</p>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded-lg text-center">
+                                <p class="text-sm text-gray-500">Member Since</p>
+                                <p class="text-sm font-semibold text-gray-800">${new Date(member.created_at).toLocaleDateString()}</p>
+                            </div>
+                        </div>
+                        ${member.user ? `
+                        <div class="bg-gray-50 p-3 rounded-lg mb-4">
+                            <p class="text-gray-600"><span class="font-semibold">Email:</span> ${member.user.email}</p>
+                            <p class="text-gray-600 mt-2"><span class="font-semibold">Username:</span> ${member.user.username}</p>
+                        </div>
+                        ` : ''}
+                        <div>
+                            <p class="text-gray-600 font-semibold mb-2">Bio:</p>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <p class="text-gray-700 leading-relaxed">${member.bio || 'No bio provided'}</p>
+                            </div>
+                        </div>
                     </div>
                 `;
                 
                 document.getElementById('viewContent').innerHTML = content;
                 document.getElementById('viewModal').classList.remove('hidden');
-            });
+            })
+            .catch(error => console.error('Error:', error));
     }
 
     // Close Modal
@@ -333,6 +368,9 @@ function openEditModal(id) {
         let formData = new FormData(this);
         let id = document.getElementById('edit_id').value;
         
+        // Add _method PUT for Laravel
+        formData.append('_method', 'PUT');
+        
         fetch(`/admin/members/${id}`, {
             method: 'POST',
             body: formData,
@@ -345,6 +383,9 @@ function openEditModal(id) {
             if (data.success) {
                 closeModal('editModal');
                 location.reload();
+            } else if (data.errors) {
+                console.log(data.errors);
+                alert('Please fix the errors: ' + JSON.stringify(data.errors));
             }
         })
         .catch(error => console.error('Error:', error));
